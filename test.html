@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #idContainer {
+            border: 10px solid #990000;
+            width: 600px;
+            height: 300px;
+        }
+
+        #idDrag {
+            border: 5px solid #C4E3FD;
+            background: #C4E3FD;
+            width: 50px;
+            height: 50px;
+            top: 50px;
+            left: 50px;
+        }
+
+        #idHandle {
+            cursor: move;
+            height: 25px;
+            background: #0000FF;
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        var path_location = location.pathname.replace(/\/[^/]+$/, '');
+        dojoConfig = {
+            async   : true,
+            isDebug : true,
+            packages: [
+                {
+                    name    : "App",
+                    location: path_location
+                }
+            ]
+        };
+
+    </script>
+    <script src="http://192.168.0.226:8001/gis/3.13/init.js"></script>
+    <script>
+        require(["dojo/dom", "App/HDSXDrag", "dojo/domReady!"], function (dom, HDSXDrag) {
+            var hdsxDrag = new HDSXDrag("idDrag", {
+                mxContainer: "idContainer",
+                Handle     : "idHandle",
+                Limit      : true,
+                onStart    : function () {dom.byId("idShow").innerHTML = "开始拖放"; },
+                onMove     : function () { dom.byId("idShow").innerHTML = "left：" + this.Drag.offsetLeft + "；top:" + this.Drag.offsetTop; },
+                onStop     : function () { dom.byId("idShow").innerHTML = "结束拖放"; }
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="idContainer">
+    <div id="idDrag">
+        <div id="idHandle"></div>
+    </div>
+</div>
+
+<input id="idReset" type="button" value="复位"/>
+<input id="idLock" type="button" value="锁定"/>
+<input id="idLockX" type="button" value="锁定水平"/>
+<input id="idLockY" type="button" value="锁定垂直"/>
+<input id="idLimit" type="button" value="范围锁定"/>
+<input id="idLimitOff" type="button" value="取消范围锁定"/>
+<br/>拖放状态：<span id="idShow">未开始</span>
+</body>
+</html>
